@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OBJ and MTL to Scratch custom 3D engine converter.</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/picnic">
+    <style>
+        body {
+            padding: 20px;
+            background-color: #f7f9fa;
+        }
+        .file-zone {
+            display: block; 
+            text-align: center; 
+            border: 2px dashed #ccc; 
+            padding: 25px; 
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .file-zone:hover {
+            border-color: #333;
+            background-color: #f0f0f0;
+        }
+        .file-status {
+            font-size: 0.85em; 
+            color: #666; 
+            margin-top: 5px; 
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        #btn-download {
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+
+    <main class="card">
+        <header>
+            <h1>OBJ and MTL to Scratch custom 3D engine converter</h1>
+        </header>
+        
+        <section>
+            <p>Convert 3D models to text files for a custom Scratch 3D engine.</p>
+            
+            <div>
+                <span style="display: block; margin-bottom: 8px; font-weight: bold;">1. Model File</span>
+                <label for="input-obj" class="button pseudo file-zone" id="label-obj">
+                     Choose your .obj file
+                </label>
+                <input type="file" id="input-obj" accept=".obj" style="display: none;">
+                <div id="status-obj" class="file-status">No file chosen</div>
+            </div>
+
+            <div>
+                <span style="display: block; margin-bottom: 8px; font-weight: bold;">2. Color File</span>
+                <label for="input-mtl" class="button pseudo file-zone" id="label-mtl">
+                     Choose your .mtl file
+                </label>
+                <input type="file" id="input-mtl" accept=".mtl" style="display: none;">
+                <div id="status-mtl" class="file-status">No file chosen</div>
+            </div>
+        </section>
+        
+        <footer>
+            <button id="btn-download" onclick="downloadResultFile()" class="success" disabled>
+                Waiting for .obj and .mtl files...
+            </button>
+        </footer>
+    </main>
+          
+    <div class="card documentation-card">
+        <header>
+            <h2>How to use</h2>
+        </header>
+        <section>
+            <h3>How to import into Scratch:</h3>
+            <ol>
+                <li>Upload your <code>.obj</code> and <code>.mtl</code> files above.</li>
+                <li>Click the <code>Download TXT</code> button once it becomes green.</li>
+                <li>Import the generated text file into a project's list.</li>
+            </ol>
+            
+            <h3>Troubleshooting:</h3>
+            <ul>
+                <li><strong>Triangles only:</strong> Ensure your 3D software (like Blender) exports the model with the "Triangulate Faces" option checked.</li>
+            </ul>
+        </section>
+    </div>
+
+
+    <script src="script.js"></script>
+</body>
+</html>
