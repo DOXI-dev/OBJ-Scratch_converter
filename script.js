@@ -132,7 +132,7 @@ function parseMTL(mtlText) {
 function convertObjMtlToColumnTxt(objText, mtlText) {
   const materials = parseMTL(mtlText);
   const vertices = [];
-  const outputValues = [];
+  const triangles = [];
   let currentMaterial = { hex: '#ffffff', saturation: 0, brightness: 100 };
 
   const lines = objText.split('\n');
@@ -156,23 +156,39 @@ function convertObjMtlToColumnTxt(objText, mtlText) {
     } 
     else if (line.startsWith('f ')) {
       const parts = line.split(/\s+/).slice(1);
-      const vIndices = parts.map(p => parseInt(p.split('/')[0]) - 1);
+      
+      const vIndices = parts.map(p => {
+        const idx = parseInt(p.split('/')[0]);
+        return idx < 0 ? vertices.length + idx : idx - 1;
+      });
 
       if (vIndices.length === 3) {
         const p1 = vertices[vIndices[0]];
         const p2 = vertices[vIndices[1]];
         const p3 = vertices[vIndices[2]];
 
-        outputValues.push(
-          p1.x, p1.y, p1.z,
-          p2.x, p2.y, p2.z,
-          p3.x, p3.y, p3.z,
-          currentMaterial.hex,
-          currentMaterial.saturation,
-          currentMaterial.brightness
-        );
+        const avgZ = (p1.z + p2.z + p3.z) / 3;
+
+        triangles.push({
+          avgZ: avgZ,
+          data: [
+            p1.x, p1.y, p1.z,
+            p2.x, p2.y, p2.z,
+            p3.x, p3.y, p3.z,
+            currentMaterial.hex,
+            currentMaterial.saturation,
+            currentMaterial.brightness
+          ]
+        });
       }
     }
+  }
+
+  triangles.sort((a, b) => a.avgZ - b.avgZ);
+
+  const outputValues = [];
+  for (const tri of triangles) {
+    outputValues.push(...tri.data);
   }
 
   return outputValues.join('\n');
