@@ -69,30 +69,21 @@ function downloadResultFile() {
     document.body.removeChild(fictionalLink);
 }
 
-function hexToHsl(hex) {
+function hexToHsb(hex) {
   let r = parseInt(hex.substring(1, 3), 16) / 255;
   let g = parseInt(hex.substring(3, 5), 16) / 255;
   let b = parseInt(hex.substring(5, 7), 16) / 255;
 
-  let max = Math.max(r, g, b), min = Math.min(r, g, b);
-  let h, s, l = (max + min) / 2;
+  let max = Math.max(r, g, b);
+  let min = Math.min(r, g, b);
+  let d = max - min;
 
-  if (max === min) {
-    h = s = 0;
-  } else {
-    let d = max - min;
-    s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
-    switch (max) {
-      case r: h = (g - b) / d + (g < b ? 6 : 0); break;
-      case g: h = (b - r) / d + 2; break;
-      case b: h = (r - g) / d + 4; break;
-    }
-    h /= 6;
-  }
+  let brightness = max;
+  let saturation = max === 0 ? 0 : d / max;
 
   return {
-    saturation: Math.round(s * 100),
-    brightness: Math.round(l * 100)
+    saturation: Math.round(saturation * 100),
+    brightness: Math.round(brightness * 100)
   };
 }
 
@@ -121,7 +112,7 @@ function parseMTL(mtlText) {
       const b = parseFloat(parts[3]);
       
       const hex = rgbToHex(r, g, b);
-      const { saturation, brightness } = hexToHsl(hex);
+      const { saturation, brightness } = hexToHsb(hex);
       
       materials[currentMat] = { hex, saturation, brightness };
     }
