@@ -157,24 +157,27 @@ function convertObjMtlToColumnTxt(objText, mtlText) {
         let p1 = vertices[vIndices[0]];
         let p2 = vertices[vIndices[1]];
         let p3 = vertices[vIndices[2]];
-        
-        const ax = p2.x - p1.x;
-        const ay = p2.y - p1.y;
-        const az = p2.z - p1.z;
 
-        const bx = p3.x - p1.x;
-        const by = p3.y - p1.y;
-        const bz = p3.z - p1.z;
+        const cx = (p1.x + p2.x + p3.x) / 3;
+        const cy = (p1.y + p2.y + p3.y) / 3;
+        const cz = (p1.z + p2.z + p3.z) / 3;
 
+        const ax = p2.x - p1.x, ay = p2.y - p1.y, az = p2.z - p1.z;
+        const bx = p3.x - p1.x, by = p3.y - p1.y, bz = p3.z - p1.z;
+
+        const nx = (ay * bz) - (az * by);
+        const ny = (az * bx) - (ax * bz);
         const nz = (ax * by) - (ay * bx);
 
-        if (nz < 0) {
+        const dot = (cx * nx) + (cy * ny) + (cz * nz);
+
+        if (dot < 0) {
           const temp = p2;
           p2 = p3;
           p3 = temp;
         }
 
-        const avgZ = (p1.z + p2.z + p3.z) / 3;
+        const avgZ = cz;
 
         triangles.push({
           avgZ: avgZ,
