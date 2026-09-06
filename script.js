@@ -155,8 +155,9 @@ function convertObjMtlToColumnTxt(objText, mtlText) {
 
       if (vIndices.length === 3) {
         const p1 = vertices[vIndices[0]];
-        const p2 = vertices[vIndices[1]];
-        const p3 = vertices[vIndices[2]];
+        
+        const p2 = vertices[vIndices[2]]; 
+        const p3 = vertices[vIndices[1]]; 
 
         const avgZ = (p1.z + p2.z + p3.z) / 3;
 
