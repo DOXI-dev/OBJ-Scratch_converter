@@ -154,9 +154,25 @@ function convertObjMtlToColumnTxt(objText, mtlText) {
       });
 
       if (vIndices.length === 3) {
-        const p1 = vertices[vIndices[0]];
-        const p2 = vertices[vIndices[1]];
-        const p3 = vertices[vIndices[2]];
+        let p1 = vertices[vIndices[0]];
+        let p2 = vertices[vIndices[1]];
+        let p3 = vertices[vIndices[2]];
+        
+        const ax = p2.x - p1.x;
+        const ay = p2.y - p1.y;
+        const az = p2.z - p1.z;
+
+        const bx = p3.x - p1.x;
+        const by = p3.y - p1.y;
+        const bz = p3.z - p1.z;
+
+        const nz = (ax * by) - (ay * bx);
+
+        if (nz < 0) {
+          const temp = p2;
+          p2 = p3;
+          p3 = temp;
+        }
 
         const avgZ = (p1.z + p2.z + p3.z) / 3;
 
