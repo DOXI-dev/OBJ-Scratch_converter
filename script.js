@@ -152,12 +152,20 @@ function convertObjMtlToColumnTxt(objText, mtlText) {
         const idx = parseInt(p.split('/')[0]);
         return idx < 0 ? vertices.length + idx : idx - 1;
       });
-
+      
+      const faceTriangles = [];
       if (vIndices.length === 3) {
-        const p1 = vertices[vIndices[0]];
-        
-        const p2 = vertices[vIndices[2]]; 
-        const p3 = vertices[vIndices[1]]; 
+        faceTriangles.push([vIndices[0], vIndices[1], vIndices[2]]);
+      } else if (vIndices.length === 4) {
+        faceTriangles.push([vIndices[0], vIndices[1], vIndices[2]]);
+        faceTriangles.push([vIndices[0], vIndices[2], vIndices[3]]);
+      }
+
+      for (const tri of faceTriangles) {
+        const p1 = vertices[tri[0]];
+
+        const p2 = vertices[tri[2]]; 
+        const p3 = vertices[tri[1]]; 
 
         const avgZ = (p1.z + p2.z + p3.z) / 3;
 
